@@ -1,0 +1,13 @@
+# Arduino / IDE
+.idea/
+*.iml
+build/
+*.elf
+*.hex
+*.bin
+*.map
+
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini
