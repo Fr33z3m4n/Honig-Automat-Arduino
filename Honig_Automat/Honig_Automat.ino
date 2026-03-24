@@ -57,7 +57,8 @@ void loop() {
     coins.update();
 
     if (adminMenu.isActive()) {
-        // Admin-Modus hat Priorität
+        // LCD darf im Admin-Modus nie ausgehen
+        powerSave.registerActivity();
         adminMenu.update();
     } else {
         // Normaler Kunden-Ablauf
