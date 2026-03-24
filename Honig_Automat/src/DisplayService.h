@@ -36,10 +36,10 @@ public:
 
     void showIdle() {
         _lcd.clear();
-        _lcd.setCursor(0, 0); _lcd.print(TextUtils::center("*** HONIG-AUTOMAT ***"));
-        _lcd.setCursor(0, 1); _lcd.print(TextUtils::center("Frischer Honig"));
-        _lcd.setCursor(0, 2); _lcd.print(TextUtils::center("direkt vom Imker"));
-        _lcd.setCursor(0, 3); _lcd.print(TextUtils::center("Taste druecken..."));
+        _lcd.setCursor(0, 0); _lcd.print(TextUtils::center("* HONIG-AUTOMAT *"));
+        _lcd.setCursor(0, 1); _lcd.print(TextUtils::center("Bereit."));
+        _lcd.setCursor(0, 2); _lcd.print(TextUtils::center("Fachnummer eingeben"));
+        _lcd.setCursor(0, 3); _lcd.print(TextUtils::center("* = Abbruch"));
     }
 
     // numStr: "1" bis "6", priceStr: "5,00 EUR"
