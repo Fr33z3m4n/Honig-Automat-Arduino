@@ -31,8 +31,8 @@ constexpr uint8_t LCD_ROWS     = 4;
 // SDA = Pin 20, SCL = Pin 21 (Arduino Mega, fest verdrahtet)
 
 // ── Münzzähler ────────────────────────────────
-// Interrupt-fähiger Pin (Mega: 2, 3, 18, 19, 20, 21)
-constexpr uint8_t COIN_INTERRUPT_PIN = 2;
+// Kann an JEDEM Digital-Pin hängen (Polling, kein Interrupt nötig)
+constexpr uint8_t COIN_PIN = 11;
 // Münzwert je Impuls in Cent
 constexpr uint8_t COIN_VALUE_PER_PULSE_CENT = 10;
 

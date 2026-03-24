@@ -485,7 +485,7 @@ constexpr uint8_t LCD_BACKLIGHT_PIN = 10;  // PWM-Pin!
 ### 1.6 Münzzähler
 
 ```cpp
-constexpr uint8_t COIN_INTERRUPT_PIN     = 2;
+constexpr uint8_t COIN_PIN                  = 11;
 constexpr uint8_t COIN_VALUE_PER_PULSE_CENT = 10;
 ```
 

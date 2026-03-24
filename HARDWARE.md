@@ -169,17 +169,16 @@ Münzprüfer                Arduino Mega
 ┌──────────┐              ┌──────────┐
 │ GND      │──────────────│ GND      │
 │ VCC      │──────────────│ 5V       │
-│ Impuls   │──────────────│ Pin 2    │  ← Interrupt-Pin INT0
+│ Impuls   │──────────────│ Pin 11   │  ← PWM-Pin (Polling)
 └──────────┘              └──────────┘
 ```
 
-> ⚠️ **Pin 2 muss verwendet werden** (oder einer der anderen Interrupt-Pins: 3, 18, 19, 20, 21).  
-> Der Eingang wird mit `INPUT_PULLUP` konfiguriert – fallende Flanke = Impuls.
+> ℹ️ **Pin 11** ist ein PWM-Pin, kein Interrupt-Pin. Die Münzerkennung erfolgt daher per **Polling** (Flanken-Erkennung im `loop()`). Das ist zuverlässig, da Münzimpulse typisch 10–50 ms lang sind.
 
 ### Konfiguration in `Config.h`
 
 ```cpp
-constexpr uint8_t COIN_INTERRUPT_PIN        = 2;
+constexpr uint8_t COIN_PIN                  = 11;
 constexpr uint8_t COIN_VALUE_PER_PULSE_CENT = 10;  // Cent pro Impuls
 ```
 
@@ -249,7 +248,7 @@ Typische Werte: **300–800 ms** je nach Aktor.
 
 | Arduino-Pin | Funktion | Richtung |
 |---|---|---|
-| `2` | Münzzähler Impuls (INT0) | INPUT_PULLUP |
+| `11` | Münzzähler Impuls (Polling) | INPUT_PULLUP |
 | `20` | LCD SDA (I2C) | I2C |
 | `21` | LCD SCL (I2C) | I2C |
 | `22` | Aktor Fach 1 | OUTPUT |
