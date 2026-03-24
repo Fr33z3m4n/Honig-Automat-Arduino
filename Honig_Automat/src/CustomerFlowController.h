@@ -85,6 +85,7 @@ private:
     uint16_t  _paidCents     = 0;
     bool      _adminRequest  = false;
     uint8_t   _selPage       = 0;
+    uint32_t  _unavailMsgMs  = 0;   // Zeitstempel "Fach nicht verfügbar"-Meldung
 
     // ── Zustandsübergang ──────────────────────
 
@@ -173,15 +174,20 @@ private:
         if (key >= '1' && key <= '0' + NUM_COMPARTMENTS) {
             uint8_t idx = key - '1';
             if (!_compartments.isAvailable(idx)) {
-                _display.showError("Fach nicht verfuegbar");
-                delay(1200);
-                showSelectionPage();
-                return;
+                _display.showCompartmentUnavailable(idx + 1);
+                _unavailMsgMs = millis();
+                return; // warten bis Timer abläuft (non-blocking)
             }
             _selectedIdx = idx;
             DBG_PRINT(F("Flow: Fach gewaehlt: "));
             DBG_PRINTLN(idx + 1);
             transitionTo(FlowState::WAITING_FOR_PAYMENT);
+        }
+
+        // Meldung "nicht verfügbar" nach 3,5s automatisch zurücksetzen
+        if (_unavailMsgMs > 0 && millis() - _unavailMsgMs > 3500) {
+            _unavailMsgMs = 0;
+            showSelectionPage();
         }
     }
 

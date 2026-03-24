@@ -111,6 +111,15 @@ public:
         _lcd.setCursor(0, 3); _lcd.print(TextUtils::center("Taste zum Fortfahren"));
     }
 
+    void showCompartmentUnavailable(uint8_t num) {
+        _lcd.clear();
+        String line1 = "Fach " + String(num) + " nicht verfuegbar";
+        _lcd.setCursor(0, 0); _lcd.print(TextUtils::center("-- HINWEIS --"));
+        _lcd.setCursor(0, 1); _lcd.print(TextUtils::center(line1));
+        _lcd.setCursor(0, 2); _lcd.print(TextUtils::center("Bitte anderes Fach"));
+        _lcd.setCursor(0, 3); _lcd.print(TextUtils::center("waehlen"));
+    }
+
     void showAdminLogin(const String& enteredMask) {
         _lcd.clear();
         _lcd.setCursor(0, 0); _lcd.print(TextUtils::center("-- ADMIN MODUS --"));
