@@ -10,7 +10,8 @@ Der Automat verkauft Honig und Imkerei-Zubehör vollautomatisch gegen Münzeinwu
 Ein kleiner, robuster Verkaufsautomat direkt vom Imker:
 
 - Kunden wählen ein Fach per Zifferntaste, werfen Münzen ein und erhalten ihr Produkt automatisch
-- Preise, Fachstatus und Admin-Code sind dauerhaft im EEPROM bzw. direkt im Quellcode konfigurierbar
+- Preise und Fachstatus werden dauerhaft im EEPROM gespeichert
+- Admin-Code ist fest im Quellcode hinterlegt (kein EEPROM)
 - Kein PC, kein WLAN, kein Cloud-Dienst notwendig – vollständig autark
 
 ---
@@ -20,11 +21,11 @@ Ein kleiner, robuster Verkaufsautomat direkt vom Imker:
 | Komponente | Details |
 |---|---|
 | Mikrocontroller | Arduino Mega 2560 |
-| Display | LCD 20×4 (HD44780-kompatibel, 4-Bit-Modus) |
+| Display | LCD 20×4 mit **I2C-Adapter** (Adresse `0x27`) |
 | Eingabe | 4×4-Matrix-Keypad |
 | Münzerkennung | Münzprüfer mit Impulsausgang (1 Impuls = konfigurierbarer Cent-Wert) |
 | Fach-Aktoren | Relais / Magnetschloss / Servo – 1 Pin pro Fach |
-| Speicher | Internes EEPROM des Arduino Mega (mind. 512 Byte) |
+| Speicher | Internes EEPROM des Arduino Mega |
 | Stromversorgung | 12 V DC (extern) |
 
 ### Keypad-Belegung
@@ -46,7 +47,10 @@ Ein kleiner, robuster Verkaufsautomat direkt vom Imker:
 | `1`–`6` | Fach auswählen |
 | `#` | Bestätigen / Weiterblättern |
 | `*` | Abbrechen / Zurück |
+| `A` | Letzte Eingabe löschen (Backspace, im Admin) |
 | `D` | Admin-Menü öffnen |
+
+➡️ Vollständige Verdrahtung: **[HARDWARE.md](HARDWARE.md)**
 
 ---
 
@@ -54,8 +58,9 @@ Ein kleiner, robuster Verkaufsautomat direkt vom Imker:
 
 ```
 Arduino_Programm/                  ← Git-Root
-├── README.md
-├── ANLEITUNG.md
+├── README.md                      ← Diese Datei
+├── ANLEITUNG.md                   ← Bedienungs- und Konfigurationsanleitung
+├── HARDWARE.md                    ← Technische Verdrahtungsanleitung
 ├── .gitignore
 ├── .github/
 │   ├── honig-automat-copilot.md   ← Copilot-Spezifikation
@@ -65,12 +70,12 @@ Arduino_Programm/                  ← Git-Root
     └── src/
         ├── Config.h                ← ⚙️ Alle Einstellungen hier
         ├── TextUtils.h             ← LCD-Hilfsklasse
-        ├── DisplayService.h        ← LCD-Abstraktion (alle Screens)
+        ├── DisplayService.h        ← LCD I2C-Abstraktion (alle Screens)
         ├── KeypadService.h         ← Nicht-blockierendes Keypad-Polling
         ├── CoinService.h           ← Münzzähler (Interrupt-basiert)
         ├── CompartmentService.h    ← Fachverwaltung + EEPROM-Persistenz
-        ├── PowerSaveService.h      ← LCD-Dimmen / Abschalten
-        ├── AdminMenuController.h   ← Admin-Menü (PIN, Preise, Status)
+        ├── PowerSaveService.h      ← LCD Ein/Aus nach Inaktivität
+        ├── AdminMenuController.h   ← Admin-Menü (PIN, Fachverwaltung, Preise)
         └── CustomerFlowController.h← Kunden-Zustandsmaschine
 ```
 
@@ -98,7 +103,12 @@ IDLE ──[Ziffer]──► SELECTING_COMPARTMENT ───┘
   │                        │
   └────────────────────────┘  (Timeout / Taste)
 
-  IDLE ──[D]──► AdminMenuController (eigene Zustandsmaschine)
+  IDLE ──[D]──► AdminMenuController
+                  └─ FACH_MENU
+                       ├─ Einzeln befüllen
+                       ├─ Alle öffnen
+                       └─ Alle befüllt markieren
+                  └─ PRICE_EDIT
 ```
 
 ---
@@ -109,11 +119,11 @@ IDLE ──[Ziffer]──► SELECTING_COMPARTMENT ───┘
 |---|---|
 | Sprache | C++11 (Arduino-Dialekt) |
 | Framework | Arduino Core für AVR |
-| Bibliotheken | `LiquidCrystal` (built-in), `EEPROM` (built-in) |
+| Bibliotheken | `LiquidCrystal_I2C`, `EEPROM` (built-in) |
 | Timing | `millis()` – kein blockierendes `delay()` im Normalbetrieb |
 | ISR | `attachInterrupt()` für Münzimpulse |
-| Persistenz | EEPROM (Preise + Fachstatus) |
-| IDE | Arduino IDE 2.x oder PlatformIO |
+| Persistenz | EEPROM (Preise + Fachstatus); Admin-Code fest im Code |
+| Upload-Tool | arduino-cli oder Arduino IDE 2.x |
 
 ---
 
@@ -124,11 +134,18 @@ IDLE ──[Ziffer]──► SELECTING_COMPARTMENT ───┘
    git clone https://github.com/Fr33z3m4n/Honig-Automat-Arduino.git
    ```
 2. `Honig_Automat/Honig_Automat.ino` in der Arduino IDE öffnen
-3. Pins und Preise in `src/Config.h` anpassen
-4. Board: **Arduino Mega 2560** auswählen
+3. Pins, Preise und Admin-Code in `src/Config.h` anpassen
+4. Board: **Arduino Mega 2560** auswählen, Port wählen
 5. Kompilieren & hochladen
 
-➡️ Detaillierte Konfigurations- und Bedienungsanleitung: **[ANLEITUNG.md](ANLEITUNG.md)**
+**Oder per arduino-cli:**
+```bash
+arduino-cli compile --fqbn arduino:avr:mega Honig_Automat
+arduino-cli upload  --fqbn arduino:avr:mega --port COM3 Honig_Automat
+```
+
+➡️ Konfiguration & Bedienung: **[ANLEITUNG.md](ANLEITUNG.md)**  
+➡️ Verdrahtung & Hardware: **[HARDWARE.md](HARDWARE.md)**
 
 ---
 
