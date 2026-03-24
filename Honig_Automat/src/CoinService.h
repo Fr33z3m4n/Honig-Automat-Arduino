@@ -31,8 +31,12 @@ public:
     }
 
     void startSession() {
-        reset();
-        _active = true;
+        _cents        = 0;
+        _newCoin      = false;
+        _active       = true;
+        _lastPulseTime = 0;
+        // Echten Pin-Zustand lesen → kein Phantom-Impuls beim Starten der Session
+        _lastPinState  = digitalRead(COIN_PIN);
         DBG_PRINTLN(F("CoinService: Session gestartet"));
     }
 
