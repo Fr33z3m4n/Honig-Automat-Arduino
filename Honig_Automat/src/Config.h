@@ -38,7 +38,9 @@ constexpr uint8_t COIN_VALUE_PER_PULSE_CENT = 10;
 
 // ── Aktor-Steuerung ───────────────────────────
 // Wie lange der Aktor-Pin HIGH bleibt (ms)
-constexpr uint16_t COMPARTMENT_OPEN_DURATION_MS = 500;
+constexpr uint16_t COMPARTMENT_OPEN_DURATION_MS  = 500;
+// Mindestanzeigedauer "Fach wird geöffnet" (ms) – unabhängig vom Aktor
+constexpr uint32_t TIMEOUT_OPENING_DISPLAY_MS    = 25000UL;  // 25 s
 
 // ── Timeouts (alle in Millisekunden) ─────────
 constexpr uint32_t TIMEOUT_IDLE_MS          = 30000UL;   // 30 s  → Rückkehr zu Idle

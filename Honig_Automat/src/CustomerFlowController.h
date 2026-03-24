@@ -222,7 +222,10 @@ private:
     void handleOpening() {
         _compartments.update(); // Aktor-Pulse steuern
 
-        if (!_compartments.isOpening()) {
+        // Erst weiter wenn Aktor fertig UND Mindestanzeigezeit abgelaufen
+        bool actorDone   = !_compartments.isOpening();
+        bool displayDone = (millis() - _stateEnterMs >= TIMEOUT_OPENING_DISPLAY_MS);
+        if (actorDone && displayDone) {
             transitionTo(FlowState::THANK_YOU);
         }
     }

@@ -14,6 +14,8 @@ public:
     void begin() {
         pinMode(COIN_PIN, INPUT_PULLUP);
         reset();
+        // Echten Pin-Zustand lesen (nicht HIGH annehmen) → vermeidet Phantom-Impuls beim Start
+        _lastPinState = digitalRead(COIN_PIN);
     }
 
     // Muss in loop() aufgerufen werden – erkennt Impulse und prüft Timeout
@@ -69,11 +71,11 @@ private:
     bool     _active        = false;
     bool     _lastPinState  = HIGH;
 
-    // Flanken-Erkennung: fallende Flanke = Impuls
+    // Flanken-Erkennung: fallende Flanke = Impuls (nur während aktiver Session)
     void detectPulse() {
         bool currentState = digitalRead(COIN_PIN);
 
-        if (_lastPinState == HIGH && currentState == LOW) {
+        if (_active && _lastPinState == HIGH && currentState == LOW) {
             // Fallende Flanke erkannt → Münzimpuls
             _cents        += COIN_VALUE_PER_PULSE_CENT;
             _lastPulseTime = millis();
