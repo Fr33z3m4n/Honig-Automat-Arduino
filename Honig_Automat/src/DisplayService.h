@@ -158,7 +158,7 @@ public:
         _lcd.setCursor(0, 0); _lcd.print(TextUtils::padRight("Preis Fach " + String(compartmentNum)));
         _lcd.setCursor(0, 1); _lcd.print(TextUtils::padRight("Aktuell: " + TextUtils::centsToString(currentCents)));
         _lcd.setCursor(0, 2); _lcd.print(TextUtils::padRight("Neu (Cent): " + input + "_"));
-        _lcd.setCursor(0, 3); _lcd.print(TextUtils::padRight("# Speich.  * Abbruch"));
+        _lcd.setCursor(0, 3); _lcd.print(TextUtils::padRight("# Speich. A=Del * Skip"));
     }
 
     // Allgemeine Nachricht (2 Zeilen)

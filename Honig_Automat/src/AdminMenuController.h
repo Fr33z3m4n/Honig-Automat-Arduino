@@ -198,6 +198,12 @@ private:
                 _priceInput += key;
                 refreshPriceEdit();
             }
+        } else if (key == 'A') {
+            // Letzte Ziffer löschen (Backspace)
+            if (_priceInput.length() > 0) {
+                _priceInput.remove(_priceInput.length() - 1);
+                refreshPriceEdit();
+            }
         } else if (key == '#') {
             savePriceEdit();
         } else if (key == '*') {
