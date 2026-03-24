@@ -1,11 +1,11 @@
 #pragma once
 #include <Arduino.h>
-#include <LiquidCrystal.h>
+#include <LiquidCrystal_I2C.h>
 #include "Config.h"
 #include "TextUtils.h"
 
 // ─────────────────────────────────────────────
-//  DisplayService.h  –  LCD-Abstraktion
+//  DisplayService.h  –  LCD-Abstraktion (I2C)
 //  Screens: Idle, Auswahl, Zahlung, ThankYou,
 //           Error, AdminLogin, AdminMenu
 // ─────────────────────────────────────────────
@@ -13,22 +13,22 @@
 class DisplayService {
 public:
     DisplayService()
-        : _lcd(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7)
+        : _lcd(LCD_I2C_ADDR, LCD_COLS, LCD_ROWS)
     {}
 
     void begin() {
-        pinMode(LCD_BACKLIGHT_PIN, OUTPUT);
-        setBacklight(LCD_BRIGHTNESS_NORMAL);
-        _lcd.begin(LCD_COLS, LCD_ROWS);
+        _lcd.init();
+        _lcd.backlight();
+        _backlightOn = true;
         _lcd.noCursor();
     }
 
-    void setBacklight(uint8_t brightness) {
-        analogWrite(LCD_BACKLIGHT_PIN, brightness);
-        _brightness = brightness;
+    void setBacklightOn(bool on) {
+        if (on) { _lcd.backlight();   _backlightOn = true;  }
+        else    { _lcd.noBacklight(); _backlightOn = false; }
     }
 
-    uint8_t getBacklight() const { return _brightness; }
+    bool isBacklightOn() const { return _backlightOn; }
 
     void clear() { _lcd.clear(); }
 
@@ -172,6 +172,6 @@ public:
     }
 
 private:
-    LiquidCrystal _lcd;
-    uint8_t       _brightness = LCD_BRIGHTNESS_NORMAL;
+    LiquidCrystal_I2C _lcd;
+    bool              _backlightOn = true;
 };

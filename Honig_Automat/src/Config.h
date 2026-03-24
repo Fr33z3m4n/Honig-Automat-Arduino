@@ -21,17 +21,13 @@ constexpr uint8_t KEYPAD_COLS = 4;
 constexpr uint8_t KEYPAD_ROW_PINS[KEYPAD_ROWS] = {46, 47, 48, 49};
 constexpr uint8_t KEYPAD_COL_PINS[KEYPAD_COLS] = {50, 51, 52, 53};
 
-// ── LCD ───────────────────────────────────────
-constexpr uint8_t LCD_RS   = 8;
-constexpr uint8_t LCD_EN   = 9;
-constexpr uint8_t LCD_D4   = 4;
-constexpr uint8_t LCD_D5   = 5;
-constexpr uint8_t LCD_D6   = 6;
-constexpr uint8_t LCD_D7   = 7;
-constexpr uint8_t LCD_COLS = 20;
-constexpr uint8_t LCD_ROWS = 4;
-// Pin für Hintergrundbeleuchtung (PWM)
-constexpr uint8_t LCD_BACKLIGHT_PIN = 10;
+// ── LCD (I2C) ─────────────────────────────────
+// I2C-Adresse des Adapters – typisch 0x27 oder 0x3F
+// Falls Display leer bleibt: anderen Wert probieren
+constexpr uint8_t LCD_I2C_ADDR = 0x27;
+constexpr uint8_t LCD_COLS     = 20;
+constexpr uint8_t LCD_ROWS     = 4;
+// SDA = Pin 20, SCL = Pin 21 (Arduino Mega, fest verdrahtet)
 
 // ── Münzzähler ────────────────────────────────
 // Interrupt-fähiger Pin (Mega: 2, 3, 18, 19, 20, 21)
@@ -53,9 +49,8 @@ constexpr uint32_t TIMEOUT_POWERSAVE_MS     = 60000UL;   // 60 s  → LCD-Dimm
 constexpr uint32_t TIMEOUT_POWEROFF_MS      = 180000UL;  // 3 min → LCD aus
 
 // ── Energiesparmodus ──────────────────────────
-constexpr uint8_t LCD_BRIGHTNESS_NORMAL = 255;
-constexpr uint8_t LCD_BRIGHTNESS_DIM    = 60;
-constexpr uint8_t LCD_BRIGHTNESS_OFF    = 0;
+// I2C-LCD: nur Ein/Aus (kein PWM-Dimmen möglich)
+// LCD_BRIGHTNESS_DIM wird als "Backlight an" behandelt
 
 // ── Admin ─────────────────────────────────────
 // ➜ Hier den gewünschten Admin-PIN eintragen und neu flashen.

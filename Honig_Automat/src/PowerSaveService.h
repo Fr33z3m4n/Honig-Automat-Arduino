@@ -28,7 +28,7 @@ public:
     void registerActivity() {
         _lastActivity = millis();
         if (_state != PowerState::ACTIVE) {
-            _display.setBacklight(LCD_BRIGHTNESS_NORMAL);
+            _display.setBacklightOn(true);
             _state = PowerState::ACTIVE;
             DBG_PRINTLN(F("PowerSave: ACTIVE"));
         }
@@ -39,11 +39,12 @@ public:
         uint32_t idle = millis() - _lastActivity;
 
         if (_state == PowerState::ACTIVE && idle >= TIMEOUT_POWERSAVE_MS) {
-            _display.setBacklight(LCD_BRIGHTNESS_DIM);
-            _state = PowerState::DIMMED;
-            DBG_PRINTLN(F("PowerSave: DIMMED"));
+            // I2C-LCD: kein Dimmen möglich, direkt auf OFF nach POWERSAVE
+            _display.setBacklightOn(false);
+            _state = PowerState::OFF;
+            DBG_PRINTLN(F("PowerSave: OFF"));
         } else if (_state == PowerState::DIMMED && idle >= TIMEOUT_POWEROFF_MS) {
-            _display.setBacklight(LCD_BRIGHTNESS_OFF);
+            _display.setBacklightOn(false);
             _state = PowerState::OFF;
             DBG_PRINTLN(F("PowerSave: OFF"));
         }
