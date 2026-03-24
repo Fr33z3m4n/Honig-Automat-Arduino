@@ -18,8 +18,9 @@ constexpr uint16_t DEFAULT_PRICES[NUM_COMPARTMENTS] = {500, 500, 500, 800, 800, 
 // ── Keypad ────────────────────────────────────
 constexpr uint8_t KEYPAD_ROWS = 4;
 constexpr uint8_t KEYPAD_COLS = 4;
-constexpr uint8_t KEYPAD_ROW_PINS[KEYPAD_ROWS] = {46, 47, 48, 49};
-constexpr uint8_t KEYPAD_COL_PINS[KEYPAD_COLS] = {50, 51, 52, 53};
+// Drähte von links nach rechts: 46,48,50,52 (Reihen), 47,49,51,53 (Spalten)
+constexpr uint8_t KEYPAD_ROW_PINS[KEYPAD_ROWS] = {46, 48, 50, 52};
+constexpr uint8_t KEYPAD_COL_PINS[KEYPAD_COLS] = {47, 49, 51, 53};
 
 // ── LCD (I2C) ─────────────────────────────────
 // I2C-Adresse des Adapters – typisch 0x27 oder 0x3F
