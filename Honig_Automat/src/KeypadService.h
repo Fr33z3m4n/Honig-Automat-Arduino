@@ -63,7 +63,7 @@ private:
         for (uint8_t row = 0; row < KEYPAD_ROWS; row++) {
             // Zeile aktiv ziehen
             digitalWrite(KEYPAD_ROW_PINS[row], LOW);
-            delayMicroseconds(10); // RC-Entprellung
+            delayMicroseconds(100); // RC-Entprellung
 
             for (uint8_t col = 0; col < KEYPAD_COLS; col++) {
                 if (digitalRead(KEYPAD_COL_PINS[col]) == LOW) {

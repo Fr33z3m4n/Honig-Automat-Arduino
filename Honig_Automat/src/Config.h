@@ -18,8 +18,8 @@ constexpr uint16_t DEFAULT_PRICES[NUM_COMPARTMENTS] = {500, 500, 500, 800, 800, 
 // ── Keypad ────────────────────────────────────
 constexpr uint8_t KEYPAD_ROWS = 4;
 constexpr uint8_t KEYPAD_COLS = 4;
-constexpr uint8_t KEYPAD_ROW_PINS[KEYPAD_ROWS] = {36, 37, 38, 39};
-constexpr uint8_t KEYPAD_COL_PINS[KEYPAD_COLS] = {40, 41, 42, 43};
+constexpr uint8_t KEYPAD_ROW_PINS[KEYPAD_ROWS] = {46, 47, 48, 49};
+constexpr uint8_t KEYPAD_COL_PINS[KEYPAD_COLS] = {50, 51, 52, 53};
 
 // ── LCD ───────────────────────────────────────
 constexpr uint8_t LCD_RS   = 8;
